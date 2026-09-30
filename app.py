@@ -22,21 +22,19 @@ if 'sid' not in st.session_state:
     st.session_state.condition = random.choice(["Form A", "Form B"])
 
 
-# 1. Échelles de réponses (Échelle de 5)
+# 1. Échelles de réponses (Échelle de 4)
 echelle_accord = [
     "1 - Tout à fait en désaccord", 
     "2 - Plutôt en désaccord", 
-    "3 - Neutre", 
-    "4 - Plutôt d'accord", 
-    "5 - Tout à fait d'accord"
+    "3 - Plutôt d'accord", 
+    "4 - Tout à fait d'accord"
 ]
 
 echelle_frequence = [
     "1 - Jamais", 
     "2 - Rarement", 
-    "3 - Parfois", 
-    "4 - Souvent", 
-    "5 - Très souvent"
+    "3 - Souvent", 
+    "4 - Très souvent"
 ]
 
 # 2. Listes des questions
