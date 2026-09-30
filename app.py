@@ -25,19 +25,19 @@ if 'sid' not in st.session_state:
 # 1. Échelles de réponses (Échelle de 6)
 echelle_accord = [
     "1 - Pas du tout d'accord", 
-    "", 
-    "", 
-    "", 
-    "",
+    "2", 
+    "3", 
+    "4", 
+    "5",
     "6 - Tout à fait d'accord"
 ]
 
 echelle_frequence = [
     "1 - Jamais", 
-    "", 
-    "", 
-    "", 
-    "", 
+    "2", 
+    "3", 
+    "4", 
+    "5", 
     "6 - Très souvent"
 ]
 
