@@ -21,38 +21,112 @@ if 'sid' not in st.session_state:
     st.session_state.sid = str(uuid.uuid4())[:8].upper()
     st.session_state.condition = random.choice(["Form A", "Form B"])
 
-st.title("Experiment Study")
-st.divider()
 
-# 4. Route the user and save data upon submission
-if st.session_state.condition == "Form A":
-    st.header("Condition A")
-    
-    with st.form("form_a"):
-        response = st.slider("How would you rate this experience?", 1, 10)
-        
-        if st.form_submit_button("Submit"):
-            # Append the data directly as a new row in Google Sheets
-            sheet.append_row([
-                st.session_state.sid, 
-                st.session_state.condition, 
-                response, 
-                str(datetime.now())
-            ])
-            st.success("Thank you! Your response has been recorded.")
+# 1. Échelles de réponses (Échelle de 5)
+echelle_accord = [
+    "1 - Tout à fait en désaccord", 
+    "2 - Plutôt en désaccord", 
+    "3 - Neutre", 
+    "4 - Plutôt d'accord", 
+    "5 - Tout à fait d'accord"
+]
 
-elif st.session_state.condition == "Form B":
-    st.header("Condition B")
+echelle_frequence = [
+    "1 - Jamais", 
+    "2 - Rarement", 
+    "3 - Parfois", 
+    "4 - Souvent", 
+    "5 - Très souvent"
+]
+
+# 2. Listes des questions
+questions_procrastination = [
+    "Mes performances ont tendance à en pâtir lorsque je dois faire la course contre les délais.",
+    "Je ne réussis pas bien si je dois me précipiter pour accomplir une tâche.",
+    "Si je remets les choses à la dernière minute, je ne suis pas satisfait de leurs résultats.",
+    "J'obtiens de meilleurs résultats si j'accomplis une tâche à un rythme plus lent, bien avant la date limite.",
+    "C'est vraiment une souffrance pour moi de travailler avec des délais imminents.",
+    "Je suis contrarié et réticent à agir lorsque je suis forcé de travailler sous pression.",
+    "Je me sens tendu et je n'arrive pas à me concentrer lorsqu'il y a trop de pression temporelle sur moi.",
+    "Je suis frustré quand je dois me précipiter pour respecter des délais.",
+    "Pour utiliser mon temps plus efficacement, je repousse délibérément certaines tâches.",
+    "Je repousse intentionnellement le travail pour maximiser ma motivation.",
+    "Afin de faire un meilleur usage de mon temps, je repousse intentionnellement certaines tâches.",
+    "Je termine la plupart de mes devoirs juste avant la date limite parce que je choisis de le faire.",
+    "Je commence souvent les choses à la dernière minute et je trouve difficile de les terminer à temps.",
+    "J'échoue souvent à accomplir les objectifs que je me suis fixés.",
+    "Je suis souvent en retard pour faire les choses.",
+    "J'ai des difficultés à terminer les activités une fois que je les ai commencées.",
+    "Même après avoir pris une décision, je retarde le passage à l'acte."
+]
+
+questions_attention = [
+    "Je fais souvent des fautes d'étourderie dans mes activités.",
+    "J'ai des difficultés à rester concentré lors de mes activités (domestiques, professionnelles).",
+    "Il m'est difficile d'attendre mon tour dans une file d'attente.",
+    "J'ai du mal à maintenir mon attention au travail.",
+    "Je ne prête pas vraiment attention aux détails.",
+    "Je quitte souvent ma place sans nécessité lors d'une réunion.",
+    "Il m'arrive souvent de remuer les mains ou les pieds sur ma chaise.",
+    "Je suis souvent sujet à des oublis dans ma vie quotidienne (tâches ménagères, courses).",
+    "Il m'est difficile d'organiser des tâches nécessitant plusieurs étapes.",
+    "Mes proches me reprochent de ne pas les écouter quand ils parlent."
+]
+
+# 3. Construction du formulaire unique
+with st.form("formulaire_complet"):
+    reponses_procrastination = []
+    reponses_attention = []
+
+    # --- PARTIE 1 : PROCRASTINATION ---
+    st.header("Partie 1 : Habitudes de travail")
+    st.write("Veuillez indiquer à quel point vous êtes d'accord avec les affirmations suivantes :")
     
-    with st.form("form_b"):
-        response = st.radio("Choose your preference:", ["Option 1", "Option 2"])
+    for index, question in enumerate(questions_procrastination):
+        st.write(f"**P{index + 1}.** {question}")
+        reponse = st.radio(
+            label="Choix caché",
+            options=echelle_accord,
+            horizontal=True,
+            label_visibility="collapsed",
+            key=f"proc_{index}" 
+        )
+        reponses_procrastination.append(reponse)
+        st.write("") 
+
+    st.divider()
+
+    # --- PARTIE 2 : ATTENTION ---
+    st.header("Partie 2 : Attention et Concentration")
+    st.write("À quelle fréquence rencontrez-vous les situations suivantes ?")
+    
+    for index, question in enumerate(questions_attention):
+        st.write(f"**A{index + 1}.** {question}")
+        reponse = st.radio(
+            label="Choix caché",
+            options=echelle_frequence,
+            horizontal=True,
+            label_visibility="collapsed",
+            key=f"att_{index}" 
+        )
+        reponses_attention.append(reponse)
+        st.write("")
+
+    # --- SOUMISSION ---
+    if st.form_submit_button("Envoyer mes réponses"):
         
-        if st.form_submit_button("Submit"):
-            # Append the data directly as a new row in Google Sheets
-            sheet.append_row([
-                st.session_state.sid, 
-                st.session_state.condition, 
-                response, 
-                str(datetime.now())
-            ])
-            st.success("Thank you! Your response has been recorded.")
+        # --- LIGNE AJOUTÉE : Extraction des chiffres uniquement pour faciliter l'analyse ---
+        # Ex: "3 - Neutre" devient l'entier 3
+        scores_procrastination = [int(rep[0]) for rep in reponses_procrastination]
+        scores_attention = [int(rep[0]) for rep in reponses_attention]
+        
+        # Concaténation de toutes les données (SID + Cond + 17 Nombres + 10 Nombres + Date)
+        ligne_google_sheet = [
+            st.session_state.sid, 
+            st.session_state.condition
+        ] + scores_procrastination + scores_attention + [str(datetime.now())]
+        
+        # Envoi direct vers Google Sheets
+        sheet.append_row(ligne_google_sheet)
+        
+        st.success("Merci ! Vos réponses ont été enregistrées avec succès.")
