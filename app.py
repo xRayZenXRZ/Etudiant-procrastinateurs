@@ -12,8 +12,8 @@ if 'sid' not in st.session_state:
     st.session_state.condition = random.choice(["Form A", "Form B"])
 
 # Display the participant info (optional, usually hidden in real experiments)
-st.sidebar.write(f"**Participant SID:** {st.session_state.sid}")
-st.sidebar.write(f"**Assigned:** {st.session_state.condition}")
+#st.sidebar.write(f"**Participant SID:** {st.session_state.sid}")
+#st.sidebar.write(f"**Assigned:** {st.session_state.condition}")
 
 st.title("Experiment Study")
 st.divider()
