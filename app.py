@@ -22,19 +22,23 @@ if 'sid' not in st.session_state:
     st.session_state.condition = random.choice(["Form A", "Form B"])
 
 
-# 1. Échelles de réponses (Échelle de 4)
+# 1. Échelles de réponses (Échelle de 6)
 echelle_accord = [
-    "1 - Tout à fait en désaccord", 
-    "2 - Plutôt en désaccord", 
-    "3 - Plutôt d'accord", 
-    "4 - Tout à fait d'accord"
+    "1 - Pas du tout d'accord", 
+    "2 - Pas d'accord", 
+    "3 - Plutôt pas d'accord", 
+    "4 - Plutôt d'accord", 
+    "5 - D'accord",
+    "6 - Tout à fait d'accord"
 ]
 
 echelle_frequence = [
     "1 - Jamais", 
-    "2 - Rarement", 
-    "3 - Souvent", 
-    "4 - Très souvent"
+    "2 - Très rarement", 
+    "3 - Rarement", 
+    "4 - Parfois", 
+    "5 - Souvent", 
+    "6 - Très souvent"
 ]
 
 # 2. Listes des questions
@@ -114,7 +118,7 @@ with st.form("formulaire_complet"):
     if st.form_submit_button("Envoyer mes réponses"):
         
         # --- LIGNE AJOUTÉE : Extraction des chiffres uniquement pour faciliter l'analyse ---
-        # Ex: "3 - Neutre" devient l'entier 3
+        # Ex: "3 - plutôt d'accord" devient l'entier 3
         scores_procrastination = [int(rep[0]) for rep in reponses_procrastination]
         scores_attention = [int(rep[0]) for rep in reponses_attention]
         
