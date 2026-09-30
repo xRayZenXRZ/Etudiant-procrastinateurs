@@ -22,7 +22,7 @@ if 'sid' not in st.session_state:
     st.session_state.condition = random.choice(["Form A", "Form B"])
 
 
-# 1. Échelles de réponses (Échelle de 6)
+
 echelle_accord = [
     "1 - Pas du tout d'accord", 
     "2", 
@@ -41,7 +41,6 @@ echelle_frequence = [
     "6 - Très souvent"
 ]
 
-# 2. Listes des questions
 questions_procrastination = [
     "Mes performances ont tendance à en pâtir lorsque je dois faire la course contre les délais.",
     "Je ne réussis pas bien si je dois me précipiter pour accomplir une tâche.",
