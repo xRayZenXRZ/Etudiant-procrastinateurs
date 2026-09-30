@@ -34,10 +34,10 @@ echelle_accord = [
 
 echelle_frequence = [
     "1 - Jamais", 
-    "2", 
-    "3", 
-    "4", 
-    "5", 
+    "", 
+    "", 
+    "", 
+    "", 
     "6 - Très souvent"
 ]
 
